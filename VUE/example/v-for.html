@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>v-for 实例</title>
+</head>
+
+<body>
+  <h1>v-for 实例</h1>
+  <hr>
+  <div id="app">
+    <!--循环肯定要对一个ul/li-->
+    <ul>
+      <!--把items里的每个变量赋予item-->
+      <!--注意：和以往不一样，让哪个标签循环就写在哪个标签上，而不是父类ul上-->
+      <!-- <li v-for="item in items"> -->
+      <li v-for="item in sortItems">
+        {{item}}
+      </li>
+    </ul>
+    <hr>
+    <ul>
+      <!-- <li v-for="student in students">
+        {{student.name}}-{{student.age}}
+      </li> -->
+      <!--序号如何输出，加索引（index），注意：index在后面-->
+      <li v-for="(student,index) in sortStudents">
+        {{index+1}}:{{student.name}}-{{student.age}}
+      </li>
+    </ul>
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        items: [53, 23, 7, 14, 54, 36, 28], //v-for就是一个循环，可能要新建数组让他循环
+        students: [{
+            name: 'liyang',
+            age: 28
+          },
+          {
+            name: 'leo',
+            age: 23
+          },
+          {
+            name: 'qifengle',
+            age: 18
+          },
+          {
+            name: 'yangyang',
+            age: 13
+          },
+        ]
+      },
+      computed: { //computed计算，表示在输出data之前可以给data进行编程
+        // items: function () {
+        //   return this.items.sort() //不是this.data.items，因为data里的值是暴露出来的
+        //   // [Vue warn]: The computed property "items" is already defined in data.[vue报错]：computed的属性已在data中定义//vue官网也没说清楚
+        // }
+        sortItems: function () {
+          // return this.items.sort()
+          //此排序问题是其排的只是首位数字，需要自己定义function进行排序，不用sort()
+          return this.items.sort(sortNumber)
+        },
+        sortStudents: function () {
+          return sortByKey(this.students, 'age');
+        }
+      }
+    })
+
+    function sortNumber(a, b) {
+      return a - b
+    }
+    //数组对象方法排序:
+    //key是按照key值排序
+    function sortByKey(array, key) {
+      return array.sort(function (a, b) {
+        var x = a[key];
+        var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+      });
+    }
+  </script>
+</body>
+
+</html>

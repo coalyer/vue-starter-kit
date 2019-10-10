@@ -1,0 +1,60 @@
+<!--<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>HelloWord</title>
+</head>
+
+<body>
+  <h1>HelloWord</h1>
+  <hr>
+  <div id="app">
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+      }
+    })
+  </script>
+</body>
+
+</html>-->
+<!--为vue模板，新页面直接考就行了-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>v-if&v-else&v-show</title>
+</head>
+
+<body>
+  <h1>v-if&v-else&v-show</h1>
+  <hr>
+  <div id="app">
+    <!--需求：模拟一个用户登录状态，在用户登录后现实用户名称，没登录显示请登录-->
+    <!-- <div v-if="isLogin">你好，liyang</div>
+    <div v-else="isLogin">请登录</div> -->
+    <div v-show="isLogin">你好，liyang</div>
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        isLogin: false //false //data是对象，isLogin是对象的一个值
+      }
+    })
+  </script>
+</body>
+
+</html>

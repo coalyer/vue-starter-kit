@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>v-model 实例</title>
+</head>
+
+<body>
+  <h1>v-model 实例</h1>
+  <hr>
+  <div id="app">
+    <!--双向数据绑定-->
+    <!--文本框绑定-->
+    <p>原始文本信息:{{message}}</p>
+    <h3>文本框</h3>
+    <p>v-model:<input type="text" v-model="message"></p>
+    <p>v-model.lazy:<input type="text" v-model.lazy="message"></p>
+    <!--lazy修饰符-->
+    <p>v-model.number:<input type="text" v-model.number="message"></p>
+    <!--number修饰符，如果最先输入的是字符串，那么这个修饰符就没用了-->
+    <p>v-model.trim:<input type="text" v-model.trim="message"></p>
+    <!--trim修饰符，去空格-->
+    <!--文本域绑定-->
+    <hr>
+    <h3>文本域</h3>
+    <!--alias语法生成:tarea-->
+    <textarea cols="30" rows="10" v-model="message"></textarea>
+    <hr>
+    <h3>多选框绑定一个值</h3>
+    <input type="checkbox" id="isTrue" v-model="isTrue">
+    <label for="isTrue">{{isTrue}}</label>
+  </div>
+
+  <script type="text/javascript">
+    var app = new Vue({
+      el: '#app',
+      data: {
+        message: 'hello world!',
+        isTrue: true
+      }
+    })
+  </script>
+</body>
+
+</html>
