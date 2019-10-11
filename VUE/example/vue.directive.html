@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>Vue.directive 自定义指令</title>
+</head>
+
+<body>
+  <h1>Vue.directive 自定义指令</h1>
+  <hr>
+  <div id="app">
+    <div v-liyang="color">{{num}}</div>
+    <p><button @click="add">ADD</button></p>
+  </div>
+  <p>
+    <button onclick="unbind()">解绑</button>
+  </p>
+  <script type="text/javascript">
+    function unbind() {
+      app.$destroy() //销毁，vue给我们提供的方法，点击之后整个vue的逻辑因解绑都不管用了
+    }
+    //必须定义自定义指令才会有作用
+    // Vue.directive("liyang", function (el, binding, vnode) {
+    //   console.log(el) //指令所绑定的元素，可以用来直接操作DOM。
+    //   console.log(binding) //一个对象，包含指令的很多信息。
+    //   console.log(binding.name) //自定义指令名称
+    //   console.log(binding.value) //自定义指令的值，常用
+    //   console.log(binding.expression) //自定义指令表达式的值，常用
+    //   console.log(vnode) //Vue编译生成的虚拟节点
+    //   el.style = "color:" + binding.value
+    // })
+
+    //自定义指令有五个生命周期（也叫钩子函数），分别是 bind,inserted,update,componentUpdated,unbind，其中前四个常用
+    Vue.directive("liyang", {
+      bind: function (el, binding) { //被绑定
+        console.log('1 - bind');
+        el.style = "color:" + binding.value //有了生命周期后，怎么在生命周期中变元素颜色
+      },
+      inserted: function () { //绑定到节点
+        console.log('2 - inserted');
+      },
+      update: function () { //组件更新
+        console.log('3 - update');
+      },
+      componentUpdated: function () { //组件更新完成
+        console.log('4 - componentUpdated');
+      },
+      unbind: function () { //解绑
+        console.log('5 - unbind');
+      }
+    })
+    var app = new Vue({
+      el: '#app',
+      data: {
+        num: 10,
+        color: 'red'
+      },
+      methods: {
+        add: function () {
+          this.num++
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>
