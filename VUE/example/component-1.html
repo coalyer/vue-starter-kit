@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <script type="text/javascript" src="../assets/js/vue.js"></script>
+  <title>component-1</title>
+</head>
+
+<body>
+  <h1>component-1</h1>
+  <hr>
+  <div id="app">
+    <!--组件其实在HTML中制作的自定义标签-->
+    <liyang></liyang>
+    <!--注意：就算是全局的也要放在vue作用域里面才能管用-->
+    <leo></leo>
+  </div>
+
+  <script type="text/javascript">
+    //1、注册全局组件
+    Vue.component('liyang', {
+      template: `<div style="color:red;">全局化注册的liyang组件（标签）</div>`
+    })
+    var app = new Vue({
+      el: '#app',
+      //2、注册局部组件
+      components: {
+        "leo": { //这一块必须写成字符串，就像全局组件中的”liyang“一样
+          template: `<div style="color:red;">局部注册的leo组件（标签）</div>`
+        }
+      }
+      //3、组件和指令的区别：组件注册的是一个标签，而指令注册的是已有标签里的一个属性。各有所长，Angular框架最擅长指令，React框架擅长组件
+    })
+  </script>
+</body>
+
+</html>

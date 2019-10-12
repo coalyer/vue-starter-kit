@@ -1,4 +1,3 @@
-<!--为vue模板，新页面直接拷贝就行了-->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -7,8 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <script type="text/javascript" src="../assets/js/vue.js"></script>
-
-  <!--script 要打出来，不能用快捷方式-->
   <title>HelloWord</title>
 </head>
 
@@ -17,13 +14,9 @@
   <hr>
   <div id="app">
     {{message}}
-    <!--{{}}是模板的输出方式/字面量 等于渲染-->
   </div>
 
   <script type="text/javascript">
-    //在这里写vue代码
-    //首先声明vue变量/vue实例化/vue生成器
-    //生成器里面是个对象：el要和div对应上；data也是个对象，是放我们参数的
     var app = new Vue({
       el: '#app',
       data: {
