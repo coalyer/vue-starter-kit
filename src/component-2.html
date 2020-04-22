@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <script type="text/javascript" src="assets/js/vue.js"></script>
+    <title>component-2</title>
+  </head>
+
+  <body>
+    <h1>component-2</h1>
+    <hr />
+    <div id="app">
+      <leo></leo>
+    </div>
+
+    <script type="text/javascript">
+      var app = new Vue({
+        el: "#app",
+        components: {
+          leo: {
+            template: `<div style="color:red;">局部注册的leo组件（标签）</div>`,
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
