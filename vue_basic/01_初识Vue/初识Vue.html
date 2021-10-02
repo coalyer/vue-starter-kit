@@ -3,11 +3,26 @@
   <head>
     <meta charset="UTF-8" />
     <title>初识Vue</title>
-    <!-- 引入Vue -->
+    <!-- note:001.搭建vue开发环境?
+      1.引入开发版的Vue
+      2.安装vue-devtools
+      3.关闭开发版提示
+    -->
+    <!-- 1.引入Vue -->
+    <!-- 
+      1.在console中验证Vue是否被引入
+      2.运行有两个提示：
+        1.安装vue-devtools
+        2.提示vue用的版本是开发版，不是发布版
+      3.如何关闭上述提示？
+        1.API->全局配置
+        2.打印vue.config可看到全局配置属性
+        3.关闭vue.config.productionTip=false
+    -->
     <script type="text/javascript" src="../js/vue.js"></script>
   </head>
   <body>
-    <!-- 
+    <!--
 			初识Vue：
 				1.想让Vue工作，就必须创建一个Vue实例，且要传入一个配置对象；
 				2.root容器里的代码依然符合html规范，只不过混入了一些特殊的Vue语法；
@@ -35,17 +50,18 @@
     </div>
 
     <script type="text/javascript">
-      Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+      // 2.关闭
+      Vue.config.productionTip = false; //阻止 vue 在启动时生成生产提示。
 
       //创建Vue实例
       new Vue({
-        el: '#demo', //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串。
+        el: "#demo", //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串。
         data: {
           //data中用于存储数据，数据供el所指定的容器去使用，值我们暂时先写成一个对象。
-          name: 'atguigu',
-          address: '北京',
+          name: "atguigu",
+          address: "北京",
         },
-      })
+      });
     </script>
   </body>
 </html>
