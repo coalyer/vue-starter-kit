@@ -87,5 +87,6 @@
       "rulerColour": "#f90",
       "iconColour ": "#f90"
     }
-  }
+  },
+  "git.ignoreLimitWarning": true
 }
