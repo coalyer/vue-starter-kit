@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>基本列表</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- note:展示列表数据
+      v-for指令:
+        1.用于展示列表数据
+        2.语法：v-for="(item, index) in xxx" :key="yyy"
+          1.item
+            插值语法中的变量p可以来自：
+              1.data中属性
+              2.计算属性
+              3.v-for的形参
+          2.index
+            1.index
+            2.key
+          3.in
+            for in 遍历 postons数组数据池
+            for of 遍历 postons对象数据池
+          4.key:让每一个li都有唯一的标识
+            （特殊的标签属性key:https://cn.vuejs.org/v2/api/#%E7%89%B9%E6%AE%8A-attribute）
+            1.少了标签属性:key，在vue中不写不报错，react会报错
+            2.:key="1"
+              tag:报错：一个重复的key被定义。
+                [Vue warn]: Duplicate keys detected: '1'. This may cause an update error.
+        3.可遍历：数组、对象、字符串（用的很少）、指定次数（用的很少）
+		-->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <!-- 遍历数组 -->
+      <!-- (value,index) -->
+      <h2>人员列表（遍历数组）</h2>
+      <ul>
+        <li v-for="(p,index) of persons" :key="index">{{p.name}}-{{p.age}}</li>
+      </ul>
+
+      <!-- 遍历对象 -->
+      <!-- (value,key) -->
+      <h2>汽车信息（遍历对象）</h2>
+      <ul>
+        <li v-for="(value,k) of car" :key="k">{{k}}-{{value}}</li>
+      </ul>
+
+      <!-- 遍历字符串 -->
+      <!-- (char,index) -->
+      <h2>测试遍历字符串（用得少）</h2>
+      <ul>
+        <li v-for="(char,index) of str" :key="index">{{char}}-{{index}}</li>
+      </ul>
+
+      <!-- 遍历指定次数 -->
+      <!-- (nuber,index)
+        （数值(从1开始),索引值(从0开始)）
+      -->
+      <h2>测试遍历指定次数（用得少）</h2>
+      <ul>
+        <li v-for="(number,index) of 5" :key="index">{{index}}-{{number}}</li>
+      </ul>
+    </div>
+
+    <script type="text/javascript">
+      Vue.config.productionTip = false;
+
+      new Vue({
+        el: "#root",
+        data: {
+          persons: [
+            { id: "001", name: "张三", age: 18 },
+            { id: "002", name: "李四", age: 19 },
+            { id: "003", name: "王五", age: 20 },
+          ],
+          car: {
+            name: "奥迪A8",
+            price: "70万",
+            color: "黑色",
+          },
+          str: "hello",
+        },
+      });
+    </script>
+  </body>
+</html>

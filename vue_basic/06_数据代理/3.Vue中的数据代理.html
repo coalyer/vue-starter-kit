@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vue中的数据代理</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- note:Vue中的数据代理：
+      1.通过vm对象来代理data对象中属性的操作（读/写）
+      2.Vue中数据代理的好处：
+        更加方便的操作data中的数据
+      3.基本原理：
+        通过Object.defineProperty()把data对象中所有属性添加到vm上。
+        为每一个添加到vm上的属性，都指定一个getter/setter。
+        在getter/setter内部去操作（读/写）data中对应的属性。
+		 -->
+    <!-- note:数据代理图示
+      1.tag:为每一个添加到vm上的属性，都指定一个getter/setter
+        1.vm.name其实取得是vm._data.name（getter）
+        2.一旦data中的数据发生改变，那么页面中用到该数据的地方也会自动更新（setter）
+      2.tag:Vue数据代理:把vm._data中的数据放到vm中，为编码更方便（Object.defineproperty）
+        通过修改代理对象(vm.data)去操作对象（vm._data）（即配置对象中的data(options.data)）
+      3.tag:vm._data中的数据劫持，源码分析时会仔细分析
+        1.vm._data中也都都指定一个getter/setter
+        2.原理:Vue模板{{data}}对应的是vm._data，对vm._data也指定一个getter/setter才能实现页面自动刷新（模板从新解析）
+    -->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <h2>学校名称：{{name}}</h2>
+      <h2>学校地址：{{address}}</h2>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    Vue.config.productionTip = false; //阻止 vue 在启动时生成生产提示。
+
+    const vm = new Vue({
+      el: "#root",
+      data: {
+        name: "尚硅谷",
+        address: "宏福科技园",
+      },
+    });
+  </script>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>列表过滤</title>
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- note:列表过滤 
+      示例：实现模糊查询
+      思路：
+        1.收集用户的输入
+        2.拿用户输入进行匹配进行筛选
+      标准写法：用computed实现，但对vue理解不深时用watch实现
+    -->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      <h2>人员列表</h2>
+      <input type="text" placeholder="请输入名字" v-model="keyWord" />
+      <ul>
+        <li v-for="(p,index) of filPerons" :key="index">
+          {{p.name}}-{{p.age}}-{{p.sex}}
+        </li>
+      </ul>
+    </div>
+
+    <script type="text/javascript">
+      Vue.config.productionTip = false;
+
+      //用watch实现
+      //tag:使用region让注释代码块可以折叠
+      //#region
+      /* new Vue({
+        el:'#root',
+        data:{
+          keyWord:'',
+          persons:[
+            {id:'001',name:'马冬梅',age:19,sex:'女'},
+            {id:'002',name:'周冬雨',age:20,sex:'女'},
+            {id:'003',name:'周杰伦',age:21,sex:'男'},
+            {id:'004',name:'温兆伦',age:22,sex:'男'}
+          ],
+          filPerons:[]
+        },
+        watch:{
+          //tag:filter()返回值是筛选后的新数组
+          //tag:为什么persons变了DOM就会变？理解vue的数据驱动
+          //tag:什么时候用简写？先用简写写，发现写不下去时再用全写
+          // keyWord(){
+          //   return this.persons.filter((p)=>{
+          //     return p.name.indexOf(val) !== -1
+          //   })
+          // }
+          // tag:每次筛选都会丢数据怎么办？persons是数据不能修改，要使用新的变量存储过滤值
+          // keyWord(){
+          //   return this.filPerons = this.persons.filter((p)=>{
+          //     return p.name.indexOf(val) !== -1
+          //   })
+          // }
+          // tag:初始化时filPerons为空怎么办？因为'abc'.indexOf('')=0，所以使用初始化立即执行
+          keyWord:{
+            immediate:true,
+            handler(val){
+              this.filPerons = this.persons.filter((p)=>{
+                return p.name.indexOf(val) !== -1
+              })
+            }
+          }
+        }
+      }) */
+      //#endregion
+
+      //用computed实现
+      new Vue({
+        el: "#root",
+        data: {
+          keyWord: "",
+          persons: [
+            { id: "001", name: "马冬梅", age: 19, sex: "女" },
+            { id: "002", name: "周冬雨", age: 20, sex: "女" },
+            { id: "003", name: "周杰伦", age: 21, sex: "男" },
+            { id: "004", name: "温兆伦", age: 22, sex: "男" },
+          ],
+        },
+        computed: {
+          /*tag:再次感受计算属性的优势：
+            执行流程：filPerons计算属性依赖于keyWord属性，而且计算属性会在两个阶段执行:
+              1.初次读取
+              2.依赖的数据变化
+           */
+          filPerons() {
+            return this.persons.filter((p) => {
+              return p.name.indexOf(this.keyWord) !== -1; //tag:监视属性才有(newValue,oldValue)
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

@@ -25,8 +25,9 @@
       <a v-bind:href="school.url.toUpperCase()" x="hello"
         >点我去{{school.name}}学习1</a
       >
-      <!-- tag:[Vue warn]: Error compiling template:
-        href="{{school.url}}": Interpolation inside attributes has been removed. Use v-bind or the colon shorthand instead. For example, instead of <div id="{{ val }}">, use <div :id="val">.
+      <!-- tag:属性内部不能用插值语法
+        [Vue warn]: Error compiling template:
+          href="{{school.url}}": Interpolation inside attributes has been removed. Use v-bind or the colon shorthand instead. For example, instead of <div id="{{ val }}">, use <div :id="val">.
       -->
       <a :href="school.url" x="hello">点我去{{school.name}}学习2</a>
     </div>

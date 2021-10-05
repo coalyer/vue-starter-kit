@@ -24,9 +24,9 @@
       单向数据绑定：<input type="text" :value="name" /><br />
       双向数据绑定：<input type="text" v-model="name" /><br />
 
-      <!-- tag:[Vue warn]: Error compiling template:
-        <h2 v-model="name">: v-model is not supported on this element type. If you are working with contenteditable, it's recommended to wrap a library dedicated for that purpose inside a custom component.
-        如下代码是错误的，因为v-model只能应用在表单类元素（输入类元素）上 
+      <!-- tag:v-model才能实现双向绑定，且v-model只能应用在表单类元素（输入类元素）上
+        [Vue warn]: Error compiling template:
+          <h2 v-model="name">: v-model is not supported on this element type. If you are working with contenteditable, it's recommended to wrap a library dedicated for that purpose inside a custom component.
       -->
       <h2 v-model:x="name">你好啊</h2>
     </div>

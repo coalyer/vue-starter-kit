@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>姓名案例_插值语法实现</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- note:插值语法实现姓名案例-->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      姓：<input type="text" v-model="firstName" /> <br /><br />
+      名：<input type="text" v-model="lastName" /> <br /><br />
+      全名：<span>{{firstName}}-{{lastName}}</span>
+      <!-- tag:组件模板应该只包含简单的表达式，复杂的表达式则应该重构为计算属性或方法。
+        https://cn.vuejs.org/v2/style-guide/#%E6%A8%A1%E6%9D%BF%E4%B8%AD%E7%AE%80%E5%8D%95%E7%9A%84%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%BC%BA%E7%83%88%E6%8E%A8%E8%8D%90
+        1.方法
+        2.计算属性
+      -->
+      <!-- <span>{{firstName.slice(0,3)}}-{{lastName}}</span> -->
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    Vue.config.productionTip = false; //阻止 vue 在启动时生成生产提示。
+
+    new Vue({
+      el: "#root",
+      data: {
+        firstName: "张",
+        lastName: "三",
+      },
+    });
+  </script>
+</html>

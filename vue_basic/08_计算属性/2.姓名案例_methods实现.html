@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>姓名案例_methods实现</title>
+    <!-- 引入Vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+  </head>
+  <body>
+    <!-- note:methods实现姓名案例-->
+    <!-- 准备好一个容器-->
+    <div id="root">
+      姓：<input type="text" v-model="firstName" /> <br /><br />
+      名：<input type="text" v-model="lastName" /> <br /><br />
+      全名：<span>{{fullName()}}</span>
+      <!-- tag:模板中加方法
+        1.不加()模板中展示的是函数的字符串
+        2.区事件绑定的()，其()可以省略
+      -->
+      <!-- <span>{{fullName}}</span> -->
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    Vue.config.productionTip = false; //阻止 vue 在启动时生成生产提示。
+
+    new Vue({
+      el: "#root",
+      data: {
+        firstName: "张",
+        lastName: "三",
+      },
+      // tag:methods可以放事件回调，也可以放方法
+      methods: {
+        //tag:methods中方法中的this是vm，因fullName是普通函数不是箭头函数
+        //tag:只要data发生变化都会引起模板的重新解析
+        fullName() {
+          console.log("@---fullName");
+          return this.firstName + "-" + this.lastName;
+        },
+      },
+    });
+  </script>
+</html>
