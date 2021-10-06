@@ -5,14 +5,24 @@
     <title>过滤器</title>
     <script type="text/javascript" src="../js/vue.js"></script>
     <script type="text/javascript" src="../js/dayjs.min.js"></script>
+    <!-- tag:时间格式工具
+      1.monentjs(大)
+      2.dayjs(小)
+      tag:bootcdn如何使用：
+      如:搜如momentjs，上面会有:
+        中文文档
+        官网
+        GitHub仓库
+        ...
+    -->
   </head>
   <body>
-    <!-- 
-      过滤器：
-        定义：对要显示的数据进行特定格式化后再显示（适用于一些简单逻辑的处理）。
-        语法：
-          1.注册过滤器：Vue.filter(name,callback) 或 new Vue{filters:{}}
-          2.使用过滤器：{{ xxx | 过滤器名}}  或  v-bind:属性 = "xxx | 过滤器名"
+    <!-- note:过滤器：
+      定义：对要显示的数据进行特定格式化后再显示（适用于一些简单逻辑的处理）。
+      语法：
+        1.注册过滤器：Vue.filter(name,callback) 或 new Vue{filters:{}}
+        2.使用过滤器：{{ xxx | 过滤器名}}  或  v-bind:属性 = "xxx | 过滤器名"
+        tag:管道符：第一个命令的输出为第二个命令的输入（借鉴linux语法）
         备注：
           1.过滤器也可以接收额外参数、多个过滤器也可以串联
           2.并没有改变原本的数据, 是产生新的对应的数据
@@ -28,7 +38,15 @@
       <h3>现在是：{{time | timeFormater}}</h3>
       <!-- 过滤器实现（传参） -->
       <h3>现在是：{{time | timeFormater('YYYY_MM_DD') | mySlice}}</h3>
-      <h3 :x="msg | mySlice">尚硅谷</h3>
+      <!-- tag:过滤器在两个地方使用：
+        1.插值语法
+        2.v-bind
+        tag:v-modal不能使用过滤器
+        [Vue warn]: Error compiling template:
+          <h3 v-model="msg | mySlice">: v-model is not supported on this element type. If you are working with contenteditable, it's recommended to wrap a library dedicated for that purpose inside a custom component.
+      -->
+      <!-- <h3 v-model="msg | mySlice">尚硅谷</h3> -->
+      <h3 :value="msg | mySlice">尚硅谷</h3>
     </div>
 
     <div id="root2">
@@ -38,6 +56,7 @@
 
   <script type="text/javascript">
     Vue.config.productionTip = false;
+    //tag:命名区别：filter/filters
     //全局过滤器
     Vue.filter("mySlice", function (value) {
       return value.slice(0, 4);
