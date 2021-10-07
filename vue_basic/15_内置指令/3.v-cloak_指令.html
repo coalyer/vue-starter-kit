@@ -11,19 +11,20 @@
     <!-- 引入Vue -->
   </head>
   <body>
-    <!-- 
-      v-cloak指令（没有值）：
-        1.本质是一个特殊属性，Vue实例创建完毕并接管容器后，会删掉v-cloak属性。
-        2.使用css配合v-cloak可以解决网速慢时页面展示出{{xxx}}的问题。
+    <!-- note:v-cloak指令（没有值）：
+      1.本质是一个特殊属性，Vue实例创建完毕并接管容器后，会删掉v-cloak属性。(//tag:cloak遮盖物)
+      2.使用css配合v-cloak可以解决网速慢时页面展示出{{xxx}}的问题。
+      tag:使用接口工具模拟懒加载：network->no throttling(无节流)
+      tag:js阻塞
+        1.放在head中阻塞整个页面
+        2.放大页面加载后会展示出{{xxx}}
+      tag:delay_server服务器，命令：node server
     -->
     <!-- 准备好一个容器-->
     <div id="root">
       <h2 v-cloak>{{name}}</h2>
     </div>
-    <script
-      type="text/javascript"
-      src="http://localhost:8080/resource/5s/vue.js"
-    ></script>
+    <script type="text/javascript" src="http://localhost:8080/resource/5s/vue.js"></script>
   </body>
 
   <script type="text/javascript">

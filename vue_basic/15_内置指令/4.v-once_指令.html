@@ -7,10 +7,11 @@
     <script type="text/javascript" src="../js/vue.js"></script>
   </head>
   <body>
-    <!-- 
-      v-once指令：
-        1.v-once所在节点在初次动态渲染后，就视为静态内容了。
-        2.以后数据的改变不会引起v-once所在结构的更新，可以用于优化性能。
+    <!-- note:v-once指令：
+      1.v-once所在节点在初次动态渲染后，就视为静态内容了。
+      2.以后数据的改变不会引起v-once所在结构的更新，可以用于优化性能。
+      tag:和v-cloak、v-pre一样，v-once是没有值的（v-once <==> v-once=""）
+      tag:v-once区别于事件修饰符once
     -->
     <!-- 准备好一个容器-->
     <div id="root">

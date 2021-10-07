@@ -7,6 +7,7 @@
   </head>
   <body>
     <!-- 
+      tag:这节课所有dom亲自操作，自定义指令即把原生dom操作进行封装
       需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。
       需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。
       自定义指令总结：
@@ -25,13 +26,19 @@
 
         三、备注：
           1.指令定义时不加v-，但使用时要加v-；
-          2.指令名如果是多个单词，要使用kebab-case命名方式，不要用camelCase命名。
+          2.指令名如果是多个单词，要使用kebab-case(短横线)命名方式，不要用camelCase(驼峰式)命名。
+            https://cn.vuejs.org/v2/guide/components-props.html#Prop-%E7%9A%84%E5%A4%A7%E5%B0%8F%E5%86%99-camelCase-vs-kebab-case
     -->
     <!-- 准备好一个容器-->
     <div id="root">
       <h2>{{name}}</h2>
       <h2>当前的n值是：<span v-text="n"></span></h2>
       <!-- <h2>放大10倍后的n值是：<span v-big-number="n"></span> </h2> -->
+      <!-- tag:指令不能脱离元素存在 -->
+      <!-- tag:解析big指令失败
+        [Vue warn]: Failed to resolve directive: big
+          (found in <Anonymous>)
+      -->
       <h2>放大10倍后的n值是：<span v-big="n"></span></h2>
       <button @click="n++">点我n+1</button>
       <hr />
@@ -69,6 +76,10 @@
         /* 'big-number'(element,binding){
           // console.log('big')
           element.innerText = binding.value * 10
+        }, */
+        /*tag:区分计算属性，此处写return没有作用
+        big() {
+          return 900;
         }, */
         big(element, binding) {
           console.log("big", this); //注意此处的this是window

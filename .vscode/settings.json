@@ -20,7 +20,7 @@
   "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
   },
-  "prettier.printWidth": 90, // 超过最大值换行
+  "prettier.printWidth": 100, // 超过最大值换行
   "better-comments.tags": [
     {
       "tag": "!",
