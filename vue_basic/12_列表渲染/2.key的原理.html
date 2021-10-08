@@ -65,6 +65,14 @@
         methods: {
           add() {
             const p = { id: "004", name: "老刘", age: 40 };
+            /*tag:体会vue的数据驱动：
+              1.所有js的dom操作都换成了指令操作等
+              2.所有js的数据操作编程了vue的焦点
+                1.数组操作
+                2.对象操作
+                3.字符串操作
+                ...
+             */
             this.persons.unshift(p);
           },
         },
