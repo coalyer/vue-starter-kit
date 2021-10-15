@@ -134,78 +134,371 @@
 
    https://awesomejs.dev/
 
+## 初识 Vue
+
+### 效果
+
+![hello](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/hello.png)
+
 ### 搭建vue开发环境
 
 1. 引入开发版的Vue
-   1. 在console中验证Vue是否被引入
-   2. 运行有两个提示：
-      1. 安装vue-devtools
-      2. 提示vue用的版本是开发版，不是发布版
-2. 安装vue-devtools
 
-3. 关闭开发版提示
+   在console中验证Vue是否被引入
 
-​        如何关闭上述提示？
+2. 运行有两个提示：
 
-​          1.  AP-->全局配置
+   1. 安装vue-devtools
+   2. 提示vue用的版本是开发版，不是发布版
 
-​          2.  打印vue.config可看到全局配置属性
+### 关闭生成生产提示
 
-​          3.  关闭vue.config.productionTip=false
+1. API-->**全局配置**
 
- vue.js可看到警告提示[vue warn]的源码（对开发中报的vue的原因查找很有作用）
+2. 打印vue.config可看到全局配置属性
 
-## 初识 Vue
+3. 关闭`vue.config.productionTip = false`
 
-<img src="/Users/liyang/Library/Application Support/typora-user-images/image-20211002132749111.png" alt="image-20211002132749111" style="zoom:100%;" />
+    vue.js可看到警告提示[vue warn]的源码（对开发中报的vue的原因查找很有作用）
 
-## 1.3. 模板语法 
+![vuejs](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/vuejs.png)
 
-### 1.3.1. 效果
+### Hello案例
 
-![image-20211002132814902](/Users/liyang/Library/Application Support/typora-user-images/image-20211002132814902.png)
+1. 引入开发版的Vue
 
-### 1.3.2. 模板的理解
+   ```vue
+   <script type="text/javascript" src="../js/vue.js"></script>
+   ```
 
-html 中包含了一些 JS 语法代码，语法分为两种，分别为:
+2. 准备好一个容器
 
-1. 插值语法(双大括号表达式)
-2. 指令(以 v-开头)
+   ```vue
+   <div id="demo"></div>
+   ```
 
-### 1.3.3. 插值语法
+   **报错**：加载静态资源错误，页签图标找不到[^1]
 
-1. 功能: 用于解析标签体内容
-2. 语法: {{xxx}} ，xxxx 会作为 js 表达式解析
+   **报错**：属性或方法age未定义[^2]
 
-### 1.3.4. 指令语法
+2. **创建Vue实例，建立和dom联系**
 
-1. 功能: 解析标签属性、解析标签体内容、绑定事件
-2. 举例:v-bind:href = 'xxxx' ，xxxx 会作为 js 表达式被解析
-3. 说明:Vue 中有有很多的指令，此处只是用 v-bind 举个例子
+   ```javascript
+   const x = new Vue({
+     el: "#demo", //el用于指定当前Vue实例为哪个容器服务，值通常为css选择器字符串。
+     data: {
+       //data中用于存储数据，数据供el所指定的容器去使用，值我们暂时先写成一个对象。
+       name: "atguigu",
+       address: "北京",
+     },
+   });
+   ```
 
-## 1.4. 数据绑定 
+   1. 学习`mvvm`后才把x学位`vm`
+   2. 参数是`配置对象`
+   3. el是css的id选择器，找到容器。(document.getElementById('root'))
 
-### 1.4.1. 效果
+   **报错**：Vue是构造函数，需要关键词new[^3]
+
+3. 和dom建立起联系后，进行**数据绑定**
+
+   ```vue
+   <div id="demo">
+     <h1>Hello，{{name.toUpperCase()}}，{{address}} {{age}}</h1>
+   </div>
+   ```
+
+   1. data用于存储可变数据，使用对象。（**后面再使用其他东西**）
+   2. dom中使用插值语法:{{}}。（和对象没任何关系）
+
+### 总结
+
+1. 想让Vue工作，就必须**创建一个Vue实例**，且要**传入一个配置对象**；
+
+2. root容器里的代码**依然符合html规范**，只不过混入了一些特殊的Vue语法；
+
+3. root容器里的代码被称为**【Vue模板】**；
+
+4. **Vue实例和容器是一一对应**的；（一个vue实例不能同时接管多个容器）
+
+5. 真实开发中**只有一个Vue实例**，并且会配合着组件一起使用；（data可以拆成多个data（组件））
+
+6. {{xxx}}中的xxx要写**js表达式**，且xxx可以自动读取到data中的所有属性；（js表达式是特殊的js语句，**特殊在会产生一个值**）
+
+   注意区分：js表达式 和 js代码(语句)
+   1. 表达式：一个表达式会产生一个值，可以放在任何一个需要值的地方：
+      1. a
+      2. a+b
+      3. demo(1)
+      4. x === y ? 'a' : 'b'
+   2. js代码(语句)
+      1. if(){}
+      2. for(){}
+
+7. 一旦data中的数据发生改变，那么页面中用到该数据的地方也会**自动更新**；
+
+## 模板语法 
+
+### 效果
+
+
+
+![template-syntax](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/template-syntax.png)
+
+### 两大分类：
+
+1. **插值语法**：
+
+   功能：用于解析标签体内容。
+
+   写法：`{{xxx}}`，xxx是js表达式，且可以直接读取到data中的所有属性。
+
+   ```vue
+   <h3>你好，{{name}}</h3>
+   ```
+
+2. **指令语法**：
+
+   功能：用于解析标签（包括：标签属性、标签体内容、绑定事件.....）。
+
+   举例：`v-bind:href="xxx"` 或  简写为 `:href="xxx"`，xxx同样要写js表达，且可以直接读取到data中的所有属性。
+
+   备注：Vue中**有很多的指令，且形式都是：`v-????`**，此处我们只是拿v-bind举个例子。
+
+   ```vue
+   <a v-bind:href="school.url.toUpperCase()" x="hello">点我去{{school.name}}学习1</a>
+   <!-- <a href="{{school.url}}" x="hello">点我去{{school.name}}学习2</a> -->
+   <!-- <a :href="{{school.url}}" x="hello">点我去{{school.name}}学习2</a> -->
+   <a :href="school.url" x="hello">点我去{{school.name}}学习2</a>
+   ```
+
+   **报错**：编译模板出错：属性内插值语法被移除[^4]
+
+   **报错**：编译模板出错：无效表达式，意外标记 '{'[^5]
+
+### 简写
+
+1. 普通写法
+
+   `v-bind:href="xxx"`
+
+   `v-????:href="xxx"`
+
+2. 简写
+
+   `:href="xxx"`（v-bind简写的是**指令**）
+
+   `v-????="xxx"`（v-????简写的是**绑定属性**，每个指令都有默认的绑定属性）
+
+## 数据绑定 
+
+### 效果
 
 ![image-20211002132916130](/Users/liyang/Library/Application Support/typora-user-images/image-20211002132916130.png)
 
-### 1.4.2. 单向数据绑定
+### 两种方式：
 
-1. 语法:`v-bind:href ="xxx"` 或简写为 :href 
-2. 特点:数据只能从 data 流向页面
+1. 单向绑定(`v-bind`)：数据只能从data流向页面。
 
-### 1.4.3. 双向数据绑定
+2. 双向绑定(`v-model`)：数据不仅能从data流向页面，还可以从页面流向data。
 
-1. 语法:`v-mode:value="xxx"` 或简写为 `v-model="xxx"`
-2. 特点:数据不仅能从 data 流向页面，还能从页面流向 data
+### 简写
 
-## 1.5. MVVM 模型
+1. 普通写法
 
-1. M:模型(Model) :对应 data 中的数据
-2. V:视图(View) :模板
-3. VM:视图模型(ViewModel) : Vue 实例对象
+   ```vue
+   单向数据绑定：<input type="text" v-bind:value="name"><br/>
+   双向数据绑定：<input type="text" v-model:value="name"><br/>
+   ```
 
-![image-20211002133110122](/Users/liyang/Library/Application Support/typora-user-images/image-20211002133110122.png)
+2. 简写
+
+   ```vue
+   单向数据绑定：<input type="text" :value="name" /><br />
+   双向数据绑定：<input type="text" v-model="name" /><br />
+   <!-- <h2 v-model:x="name">你好啊</h2> -->
+   ```
+
+   备注：
+
+   1. 双向绑定一般都应用在**表单类元素**上（如：input、select等）
+   2. **`v-model:value` 可以简写为 `v-model`**，因为v-model默认收集的就是value值。
+   3. **报错**：编译模板出错：v-model才能实现双向绑定，v-model只能应用在表单类元素（输入类元素）上[^6]
+
+## el与data的两种写法
+
+为穿插知识点，应该在**组件**中去讲
+
+### el的2种写法：
+
+1. new Vue时候**配置el属性**。
+2. 先创建Vue实例，随后再通过`vm.$mount('#root')`指定el的值。、
+         1. 把容器中的模板交给实例进行解析
+         2. 解析之后把解析完的内容放回容器（挂载）
+
+### 挂载注意点
+
+```js
+const v = new Vue({
+  //el:'#root', //第一种写法
+  data:{
+  	name:'尚硅谷'
+  }
+})
+console.log(v)
+v.$mount('#root') //第二种写法
+```
+
+1. $mount：山、**挂载**
+2. \$mount在构造函数（new Vue）中才能找到，打印v并不能直接看到$mount，而得从**原型**中找
+
+### data的2种写法：
+
+1. 对象式
+
+   ```js
+   data:{
+     name:'尚硅谷'
+   }
+   ```
+
+2. 函数式
+
+   ```js
+   data() {
+     console.log("@@@", this); //此处的this是Vue实例对象
+     return {
+     	name: "尚硅谷",
+     };
+   }
+   ```
+
+### 函数式data注意点
+
+1. 如何选择：目前哪种写法都可以，以后学习到**组件时，data必须使用函数式**，否则会报错。
+   1. data在组件中必须使用函数式，**否则会报错**。
+   2. data函数式**必须返回对象**
+   3. data函数式**是给Vue调用的，所以在date函数式中打印this是Vue对象**[(VM（数据代理）)](#VM（数据代理）)
+   4. data()是**`data:function()`的简写**
+
+   ```js
+   // 普通写法
+   data:function() {
+     return {
+     	name: "尚硅谷",
+     };
+   },
+   // 简写
+   data() {
+     return {
+     	name: "尚硅谷",
+     };
+   },
+   ```
+
+2. 一个重要的原则：
+
+   由**Vue管理的函数，一定不要写箭头函数**，一旦写了箭头函数，this就不再是Vue实例了。（而是Window）
+
+   ​	data()是学习的第一个Vue管理的函数
+   
+   ```js
+   // 普通函数
+   data:function() {
+     console.log("@@@", this); //此处的this是Vue实例对象
+     return {
+     	name: "尚硅谷",
+     };
+   },
+   // 箭头函数
+   data:()=> {
+     console.log("@@@", this); //此处的this是Window实例对象
+     return {
+     	name: "尚硅谷",
+     };
+   },
+   ```
+   
+   
+
+## MVVM 模型
+
+### MVVM
+
+1. M：模型(Model) ：data中的数据（**Plain JavaScript Object**）
+
+2. V：视图(View) ：模板代码（**DOM**）
+
+3. VM：视图模型(ViewModel)：Vue实例（**Vue**：**DOM Listeners**、**Data Bindings**）
+
+![MVVM](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/MVVM.png)
+
+### VM（数据代理）
+
+在文档中经常会使用 vm (ViewModel 的缩写) 这个变量名表示 Vue 实例（vm就是**数据代理**）
+
+```js
+const vm = new Vue({
+  el: "#root",
+  data: {
+    name: "尚硅谷",
+    address: "北京",
+  },
+});
+console.log(vm);
+```
+
+```vue
+<h1>学校名称：{{name}}</h1>
+<h1>学校地址：{{address}}</h1>
+<!-- <h1>测试一下1：{{1+1}}</h1> -->
+<!-- <h1>测试一下2：{{$options}}</h1> -->
+<!-- 初始化选项：https://cn.vuejs.org/v2/api/#vm-options -->
+<!-- 以下在原型中 -->
+<!-- <h1>测试一下3：{{$emit}}</h1> -->
+<!-- 触发当前实例上的事件:https://cn.vuejs.org/v2/api/index.html#vm-emit -->
+<!-- <h1>测试一下4：{{_c}}</h1> -->
+```
+
+观察发现：
+
+1. data中所有的属性，最后都出现在了vm身上。
+
+2. **vm身上所有的属性** 及 **Vue原型上所有属性**，在Vue模板中都可以直接使用。
+
+   1. **$options**
+   2. **$emit（原型中）**
+   3. **$mount（原型中）**
+
+   ![proto](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/proto.png)
+
+3. **所有带$都是vue给程序员使用的**属性或对象
+
+![image-20211012214536494](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/$.png)
+
+## 数据代理
+
+### Object.defineproperty方法：
+
+1. 作用：给一个**对象添加/定义属性**使用（`define`(定义)`property`(属性)）
+
+2. Vue中很多地方用到了他
+   1. **数据代理**
+   2. **数据劫持**
+   3. **计算属性**
+
+3. 参数3是配置项
+   1. 基本配置项
+      1. `enumerable`：不可枚举在控制台中显示是淡色
+      2. `writable`
+      3. `configurable`
+   2. 高级配置项
+      1. `getter`
+      2. `setter`
+
+### 何为数据代理
+
+数据代理：通过一个对象**代理**另一个对象中**属性的操作（读/写）**
 
 ## 1.6. 事件处理 
 
@@ -385,6 +678,13 @@ v-my-directive='xxx'
 
 ### 1.14.4. 常用的生命周期方法
 
-1. mounted(): 发送 ajax 请求, 启动定时器等异步任务
+1. mounted(): 发送 ajax 请求,启动定时器等异步任务测试
 2. beforeDestory(): 做收尾工作, 如: 清除定时器
+
+[^1]: \[Vue warn]: Failed to load resource: the server responded with a status of 404 (Not Found)
+[^2]: \[Vue warn]: Property or method "age" is not defined on the instance but referenced during render. Make sure that this property is reactive, either in the data option, or for class-based components, by initializing the property.
+[^3]: \[Vue warn]: Vue is a constructor and should be called with the \`new` keyword
+[^4]: [Vue warn]: Error compiling template:href="{{school.url}}": Interpolation inside attributes has been removed. Use v-bind or the colon shorthand instead. For example, instead of \<div id="{{ val }}">, use \<div :id="val">.
+[^5]: [Vue warn]: Error compiling template:invalid expression: Unexpected token '{' in {{school.url}} Raw expression: :href="{{school.url}}"
+[^6]: [Vue warn]: Error compiling template: \<h2 v-model="name">: v-model is not supported on this element type. If you are working with contenteditable, it's recommended to wrap a library dedicated for that purpose inside a custom component.
 
