@@ -478,22 +478,95 @@ console.log(vm);
 
 ## 数据代理
 
-### Object.defineproperty方法：
+### `Object.defineproperty`方法：
 
-1. 作用：给一个**对象添加/定义属性**使用（`define`(定义)`property`(属性)）
+给一个**对象添加/定义属性**使用（`define`(定义)`property`(属性)）
 
-2. 参数3是配置项
-   1. 基本配置项
-      1. `enumerable`：不可枚举在控制台中显示是淡色
-      2. `writable`
-      3. `configurable`
-   2. 高级配置项
-      1. `getter`
-      2. `setter`
-3. Vue中很多地方用到
-   1. **数据代理**
-   2. **数据劫持**
-   3. **计算属性**
+```js
+
+```
+
+参数：参数3是**配置项**
+
+1. 基本配置项
+
+   1. `enumerable`：是否可以枚举
+
+      ```js
+      let person = {
+      	name:'张三',
+      	sex:'男',
+      }
+      Object.defineProperty(person,'age',{
+      	value:18,
+        enumerable: false //控制属性是否可以枚举，默认值是false
+      })
+      // 不可枚举
+      console.log(Object.keys(person))
+      for (const key in person) {
+        console.log("@", person[key]);
+      }
+      ```
+
+      1. false为**淡色**，true为原色
+      2. 默认为false
+
+      ![image-20211025171319344](/Users/liyang/Library/Application Support/typora-user-images/image-20211025171319344.png)
+
+      ![enumerable](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/enumerable.png)
+
+   2. `writable`：是否可以被修改
+
+      ```js
+      let person = {
+      	name:'张三',
+      	sex:'男',
+      }
+      Object.defineProperty(person,'age',{
+      	value:18,
+        writable: false //控制属性是否可以被修改，默认值是false
+      })
+      // 不可修改
+      person.age = 19;
+      console.log(person);
+      ```
+
+      1. 默认为false
+
+         ![image-20211025163826748](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/wri.png)
+
+   3. `configurable`：是否可以被删除
+
+      ```js
+      let person = {
+      	name:'张三',
+      	sex:'男',
+      }
+      Object.defineProperty(person,'age',{
+      	value:18,
+        configurable: false, //控制属性是否可以被删除，默认值是false
+      })
+      // 不可修改
+      person.age = 19;
+      console.log(person);
+      ```
+
+      
+
+2. 高级配置项
+
+   1. `getter`
+   2. `setter`
+
+
+
+
+
+### Vue中的应用：
+
+1. **数据代理**
+2. **数据劫持**
+3. **计算属性**
 
 
 
