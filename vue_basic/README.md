@@ -590,7 +590,7 @@ console.log(vm);
 ### 1.6.3. 事件修饰符
 
 1. .prevent : 阻止事件的默认行为 event.preventDefault() 
-2. 2. .stop : 停止事件冒泡 event.stopPropagation()
+2. .stop : 停止事件冒泡 event.stopPropagation()
 
 ### 1.6.4. 按键修饰符
 
