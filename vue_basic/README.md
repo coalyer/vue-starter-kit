@@ -1,3 +1,5 @@
+ 
+
 # 第1章:Vue 核心
 
 ## 课程简介
@@ -423,19 +425,23 @@ v.$mount('#root') //第二种写法
 
 ## MVVM 模型
 
-### MVVM
+[vue官网解释](https://cn.vuejs.org/v2/guide/instance.html)：虽然没有完全遵循 [MVVM 模型](https://zh.wikipedia.org/wiki/MVVM)，但是 Vue 的设计也受到了它的启发。因此在文档中经常会使用 `vm` (`ViewModel` 的**缩写)** 这个变量名表示 `Vue实例`。
 
-1. M：模型(Model) ：data中的数据（**Plain JavaScript Object**）
+### 基于MVVM启发的vue设计：
 
-2. V：视图(View) ：模板代码（**DOM**）
+1. M：模型(Model) ：**data中的数据**（`Plain JavaScript Object`：一般js对象）
+2. V：视图(View) ：**模板代码**（`DOM`）
+3. VM：视图模型(ViewModel)：**Vue实例**（**Vue**：`DOM Listeners`、`Data Bindings`）
 
-3. VM：视图模型(ViewModel)：Vue实例（**Vue**：**DOM Listeners**、**Data Bindings**）
+直意：`Vue实例`为`data`与`DOM`做了个桥梁、纽带
 
 ![MVVM](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/MVVM.png)
 
-### VM（数据代理）
+### 使用vm代表Vue实例：
 
-在文档中经常会使用 vm (ViewModel 的缩写) 这个变量名表示 Vue 实例（vm就是**数据代理**）
+在文档中经常会使用 vm (ViewModel 的缩写) 这个变量名表示 `Vue实例`（`vm`就是**数据代理**）
+
+**由于MVVM的思想，所以以后都用vm命名Vue实例**
 
 ```js
 const vm = new Vue({
@@ -447,6 +453,8 @@ const vm = new Vue({
 });
 console.log(vm);
 ```
+
+### 模板中都能有什么？
 
 ```vue
 <h1>学校名称：{{name}}</h1>
@@ -478,19 +486,35 @@ console.log(vm);
 
 ## 数据代理
 
-### `Object.defineproperty`方法：
+### 回顾`Object.defineproperty`方法：
+
+定义：
 
 给一个**对象添加/定义属性**使用（`define`(定义)`property`(属性)）
 
-```js
+基本用法：
 
+```js
+let person = {
+	name:'张三',
+	sex:'男',
+}
+Object.defineProperty(person,'age',{
+	value:18
+})
 ```
 
-参数：参数3是**配置项**
+**淡色**代表不可被枚举
+
+![defineproperty](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/defineproperty.png)
+
+配置项：
 
 1. 基本配置项
 
-   1. `enumerable`：是否可以枚举
+   1. `enumerable`
+
+      控制属性是否可以枚举，默认值是false
 
       ```js
       let person = {
@@ -508,14 +532,11 @@ console.log(vm);
       }
       ```
 
-      1. false为**淡色**，true为原色
-      2. 默认为false
-
-      ![image-20211025171319344](/Users/liyang/Library/Application Support/typora-user-images/image-20211025171319344.png)
-
       ![enumerable](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/enumerable.png)
 
-   2. `writable`：是否可以被修改
+   2. `writable`
+
+      控制属性是否可以被修改，默认值是false
 
       ```js
       let person = {
@@ -531,11 +552,11 @@ console.log(vm);
       console.log(person);
       ```
 
-      1. 默认为false
+      ![writable](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/writable.png)
 
-         ![image-20211025163826748](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/wri.png)
+   3. `configurable`
 
-   3. `configurable`：是否可以被删除
+      控制属性是否可以被删除，默认值是false
 
       ```js
       let person = {
@@ -546,21 +567,89 @@ console.log(vm);
       	value:18,
         configurable: false, //控制属性是否可以被删除，默认值是false
       })
-      // 不可修改
-      person.age = 19;
-      console.log(person);
+            // 不可被删除
+            delete person.age;
+            console.log(person);
       ```
 
-      
+      ![image-20211101165359303](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/configurable.png)
 
 2. 高级配置项
 
+   ```js
+   let number = 18;
+   let person = {
+     name: "张三",
+     sex: "男",
+   };
+   Object.defineProperty(person, "age", {
+     // 当有人读取person的age属性时，get函数(getter)就会被调用，且返回值就是age的值
+     get() {
+       return number;
+     },
+     //当有人修改person的age属性时，set函数(setter)就会被调用，且会收到修改的具体值
+     set(value) {
+       number = value;
+     },
+   });
+   console.log(person);
+   ```
+
+   ​	![getter-setter](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/getter-setter.png)
+
    1. `getter`
+
+      当有人读取person的age属性时，`get函数`(`getter`)就会被调用，且返回值就是age的值
+
+      1. Invoke property getter（调属性getter） （Invoke映射，getter即get()配置项（get属性名+function函数））
+      2. 每次访问age属性都会触发get
+
+      ```js
+      let number = 18;
+      let person = {
+        name: "张三",
+        sex: "男",
+      };
+      Object.defineProperty(person, "age", {
+        // get()是get:function aaa()的简写，aaa是gat的自定义名称，可在控制台看到
+        get() {
+          console.log("有人读取age属性了");
+          return number;
+        },
+      });
+      console.log(person);
+      ```
+
+      ![getter](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/getter.png)![getter-on](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/getter-on.png)
+
    2. `setter`
 
+      当有人修改person的age属性时，set函数(setter)就会被调用，且会收到修改的具体值
 
+      ``` js
+      let number = 18;
+      let person = {
+        name: "张三",
+        sex: "男",
+      };
+      Object.defineProperty(person, "age", {
+        // 当有人读取person的age属性时，get函数(getter)就会被调用，且返回值就是age的值
+        get() {
+          console.log("有人读取age属性了");
+          return number;
+        },
+        //当有人修改person的age属性时，set函数(setter)就会被调用，且会收到修改的具体值
+        set(value) {
+          console.log("有人修改了age属性，且值是", value);
+          number = value;
+        },
+      });
+      console.log(person);
+      ```
 
+      number和person明明是两个对象，但是借住`defineProperty`使`number`与`person.age`产生关联
 
+      ![setter-on](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/setter-on.png)
 
 ### Vue中的应用：
 
@@ -568,24 +657,166 @@ console.log(vm);
 2. **数据劫持**
 3. **计算属性**
 
-
-
 ### 何为数据代理
 
 数据代理：通过一个对象**代理**另一个对象中**属性的操作（读/写）**
 
+```js
+let obj = { x: 100 };
+let obj2 = { y: 200 };
+
+Object.defineProperty(obj2, "x", {
+  get() {
+    return obj.x;
+  },
+  set(value) {
+    obj.x = value;
+  },
+});
+```
+
+通过修改代理对象(obj2)去操作对象(obj1)
+
+![data-proxy](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/data-proxy.png)
+
+### Vue中的数据代理：
+
+1.先看效果，invoke property getter：用属性getter
+
+访问vm上的address时getter工作，修改是setter工作，他们都有对应的set()、get()，读取和修改改的是date.address
+
+![image-20211111125340105](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111125340105.png)
+
+验证vm.address通过getter、setter读取和修改data.address  
+
+![image-20211111125304094](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111125304094.png) 验证getter，修改data中的name![image-20211111125453771](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111125453771.png)
+
+验证setter， 拿不到配置项的data，vm一定会存到自己的属性中(因为不存怎么拿)，vm._data = data
+
+![image-20211111130024029](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130024029.png)
+
+![image-20211111130213618](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130213618.png)
+
+![image-20211111130325004](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130325004.png)
+
+2.示意图：
+
+第一个箭头：存数据。并没有做数据代理，也能实现功能 ，此时通过_data.的方式也能在模板中使用
+
+第二个箭头：数据代理。目的：让编码更方便
+
+![diagram-data-proxy](https://cdn.jsdelivr.net/gh/coalyer/image-store/blog/vue_basic/diagram-data-proxy.png)
+
+![image-20211111130526419](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130526419.png)
+
+3.总结：
+
+1. 通过vm对象来代理data对象中属性的操作（读/写）
+
+2. Vue中数据代理的好处：
+
+   更加方便的操作data中的数据
+
+3. 基本原理：
+
+   通过Object.defineProperty()把data对象中所有属性添加到vm上。
+
+   为每一个添加到vm上的属性，都指定一个getter/setter。
+
+   在getter/setter内部去操作（读/写）data中对应的属性。
+
+细节：
+
+vm._data中也有getter、setter，是做了个数据劫持
+
+想实现name改变，模板中name实时改变，就要对_data中数据进行数据劫持
+
+![image-20211111130927698](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130927698.png)
+
+![image-20211111130808309](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111130808309.png) 
+
 ## 1.6. 事件处理 
 
-### 1.6.1. 效果
+### 事件的基本使用
 
-![image-20211002133155911](/Users/liyang/Library/Application Support/typora-user-images/image-20211002133155911.png)
+效果：
 
-### 1.6.2. 绑定监听
+<img src="/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211002133155911.png" alt="image-20211002133155911" style="zoom:25%;" />
+
+验证showInfo能不能接收参数
+
+第一个参数是默认事件对象
+
+![image-20211111131415988](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111131415988.png)
+
+总结事件对象有啥：
+
+1、enent.target(经常用)：拿到事件对象（元素），拿到元素后可以做很多事如：enent.target.innerText
+
+​	
+
+![image-20211111131645096](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111131645096.png)
+
+验证showInfo事件中的this是谁？
+
+this是vue对象
+
+  ![image-20211111131901328](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111131901328.png)
+
+当写成箭头函数时，this是window对象，如果要接受vue的管理，就不能用箭头函数
+
+![image-20211111132053519](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111132053519.png)
+
+![image-20211111132234515](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111132234515.png)
+
+简写形成
+
+用@符，不是去调v-on，因为那是v-bind的机械
+
+![image-20211111132428314](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111132428314.png)
+
+传其他参数
+
+有这种需求，如：页面上有学生信息，点击删除要把学生的id传给删除事件
+
+一个参数会丢失事件对象
+
+![image-20211111132801437](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111132801437.png)
+
+通过$event从新把事件对象传进来
+
+![image-20211111132955831](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111132955831.png)
+
+mounted中的方法是不做数据代理的
+
+可以放到data中做代理，但是会让vue很累，数据代理是代理数据用的，代理方法没意义
+
+![image-20211111133152286](/Users/liyang/项目整理/13.vue全家桶学习项目/vue-starter-kit/vue_basic/README.assets/image-20211111133152286.png)
+
+总结：
+
+事件的基本使用：
+
+1.使用v-on:xxx 或 @xxx 绑定事件，其中xxx是事件名；
+
+2.事件的回调需要配置在methods对象中，最终会在vm上；
+
+3.methods中配置的函数，不要用箭头函数！否则this就不是vm了；
+
+4.methods中配置的函数，都是被Vue所管理的函数，this的指向是vm 或 组件实例对象；
+
+5.@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传参；
+
+
+
+绑定监听
 
 1. v-on:xxx="fun"
 2. @xxx="fun"
 3. @xxx="fun(参数)"
 4. 默认事件形参: event 5. 隐含属性对象: $event
+
+### 事件修饰符
 
 ### 1.6.3. 事件修饰符
 
